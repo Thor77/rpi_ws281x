@@ -124,7 +124,7 @@ class Adafruit_NeoPixel(object):
                 index += 1
         # Else assume the passed in value is a number to the position.
         else:
-            return ws.ws2811_led_set(self.channel, position, color)
+            return ws.ws2811_led_set(self.channel, position, color.value)
 
     def set_brightness(self, brightness):
         '''
