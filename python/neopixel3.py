@@ -130,7 +130,7 @@ class Adafruit_NeoPixel(object):
             ws.delete_ws2811_t(self._leds)
             self._leds = None
             self._channel = None
-            # Note that ws2811_fini will free the memory used by led_data internally.
+            # ws2811_fini will free the memory used by led_data internally.
 
     def show(self):
         '''
@@ -139,15 +139,18 @@ class Adafruit_NeoPixel(object):
         resp = ws.ws2811_render(self._leds)
         if resp != ws.WS2811_SUCCESS:
             message = ws.ws2811_get_return_t_str(resp)
-            raise RuntimeError('ws2811_render failed with code {0} ({1})'.format(resp, message))
+            raise RuntimeError(
+                'ws2811_render failed with code {0} ({1})'.format(
+                    resp, message)
+            )
 
     def setPixelColor(self, n, color):
         '''
-        Set LED at position n to the provided 24-bit color value (in RGB order).
+        Set LED at position n to the provided 24-bit color value (in RGB order)
         '''
         self._led_data[n] = color
 
-    def setPixelColorRGB(self, n, red, green, blue, white = 0):
+    def setPixelColorRGB(self, n, red, green, blue, white=0):
         '''
         Set LED at position n to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
