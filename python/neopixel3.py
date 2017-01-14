@@ -155,13 +155,11 @@ class Adafruit_NeoPixel(object):
         :return: 24-bit RGB color value of the LED
         :rtype: int
         '''
-        # Handle if a slice of positions are passed in by grabbing all the
-        # values and returning them in a list.
         if isinstance(position, slice):
+            positions_slice = position
             return [
-                ws.ws2811_led_get(self.channel, n)
-                for n in range(position.indices(self.size))
+                ws.ws2811_led_get(self.channel, position)
+                for position in range(*positions_slice.indices(self.size))
             ]
-        # Else assume the passed in value is a number to the position.
         else:
             return ws.ws2811_led_get(self.channel, position)
