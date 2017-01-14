@@ -126,40 +126,50 @@ class Adafruit_NeoPixel(object):
             # Note that ws2811_fini will free the memory used by led_data internally.
 
     def show(self):
-        """Update the display with the data from the LED buffer."""
+        '''
+        Update the display with the data from the LED buffer.
+        '''
         resp = ws.ws2811_render(self._leds)
         if resp != ws.WS2811_SUCCESS:
             message = ws.ws2811_get_return_t_str(resp)
             raise RuntimeError('ws2811_render failed with code {0} ({1})'.format(resp, message))
 
     def setPixelColor(self, n, color):
-        """Set LED at position n to the provided 24-bit color value (in RGB order).
-        """
+        '''
+        Set LED at position n to the provided 24-bit color value (in RGB order).
+        '''
         self._led_data[n] = color
 
     def setPixelColorRGB(self, n, red, green, blue, white = 0):
-        """Set LED at position n to the provided red, green, and blue color.
+        '''
+        Set LED at position n to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
         lowest intensity and 255 is the highest intensity).
-        """
+        '''
         self.setPixelColor(n, Color(red, green, blue, white))
 
     def setBrightness(self, brightness):
-        """Scale each LED in the buffer by the provided brightness.  A brightness
+        '''
+        Scale each LED in the buffer by the provided brightness.  A brightness
         of 0 is the darkest and 255 is the brightest.
-        """
+        '''
         ws.ws2811_channel_t_brightness_set(self._channel, brightness)
 
     def getPixels(self):
-        """Return an object which allows access to the LED display data as if
+        '''
+        Return an object which allows access to the LED display data as if
         it were a sequence of 24-bit RGB values.
-        """
+        '''
         return self._led_data
 
     def numPixels(self):
-        """Return the number of pixels in the display."""
+        '''
+        Return the number of pixels in the display.
+        '''
         return ws.ws2811_channel_t_count_get(self._channel)
 
     def getPixelColor(self, n):
-        """Get the 24-bit RGB color value for the LED at position n."""
+        '''
+        Get the 24-bit RGB color value for the LED at position n.
+        '''
         return self._led_data[n]
