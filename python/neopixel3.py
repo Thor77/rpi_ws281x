@@ -15,42 +15,6 @@ class Color(object):
         self.value = (white << 24) | (red << 16) | (green << 8) | blue
 
 
-class _LED_Data(object):
-    """Wrapper class which makes a SWIG LED color data array look and feel like
-    a Python list of integers.
-    """
-    def __init__(self, channel, size):
-        self.size = size
-        self.channel = channel
-
-    def __getitem__(self, pos):
-        """Return the 24-bit RGB color value at the provided position or slice
-        of positions.
-        """
-        # Handle if a slice of positions are passed in by grabbing all the values
-        # and returning them in a list.
-        if isinstance(pos, slice):
-            return [ws.ws2811_led_get(self.channel, n) for n in range(pos.indices(self.size))]
-        # Else assume the passed in value is a number to the position.
-        else:
-            return ws.ws2811_led_get(self.channel, pos)
-
-    def __setitem__(self, pos, value):
-        """Set the 24-bit RGB color value at the provided position or slice of
-        positions.
-        """
-        # Handle if a slice of positions are passed in by setting the appropriate
-        # LED data values to the provided values.
-        if isinstance(pos, slice):
-            index = 0
-            for n in range(pos.indices(self.size)):
-                ws.ws2811_led_set(self.channel, n, value[index])
-                index += 1
-        # Else assume the passed in value is a number to the position.
-        else:
-            return ws.ws2811_led_set(self.channel, pos, value)
-
-
 class Adafruit_NeoPixel(object):
     def __init__(self, num, pin, freq_hz=800000, dma=5, invert=False,
                  brightness=255, channel=0, strip_type=ws.WS2811_STRIP_RGB):
@@ -95,9 +59,6 @@ class Adafruit_NeoPixel(object):
         # Initialize the controller
         ws.ws2811_t_freq_set(self._leds, freq_hz)
         ws.ws2811_t_dmanum_set(self._leds, dma)
-
-        # Grab the led data array.
-        self._led_data = _LED_Data(self._channel, num)
 
         # Substitute for __del__, traps an exit condition and cleans up
         atexit.register(self._cleanup)
@@ -154,7 +115,16 @@ class Adafruit_NeoPixel(object):
         '''
         Set LED at position n to the provided 24-bit color value (in RGB order)
         '''
-        self._led_data[position] = color
+        # Handle if a slice of positions are passed in by setting the
+        # appropriate LED data values to the provided values.
+        if isinstance(position, slice):
+            index = 0
+            for n in range(position.indices(self.size)):
+                ws.ws2811_led_set(self.channel, n, color[index])
+                index += 1
+        # Else assume the passed in value is a number to the position.
+        else:
+            return ws.ws2811_led_set(self.channel, position, color)
 
     def set_brightness(self, brightness):
         '''
@@ -174,4 +144,13 @@ class Adafruit_NeoPixel(object):
         '''
         Get the 24-bit RGB color value for the LED at position n.
         '''
-        return self._led_data[position]
+        # Handle if a slice of positions are passed in by grabbing all the
+        # values and returning them in a list.
+        if isinstance(position, slice):
+            return [
+                ws.ws2811_led_get(self.channel, n)
+                for n in range(position.indices(self.size))
+            ]
+        # Else assume the passed in value is a number to the position.
+        else:
+            return ws.ws2811_led_get(self.channel, position)
