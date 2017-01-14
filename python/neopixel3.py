@@ -15,7 +15,7 @@ class Color(object):
         self.value = (white << 24) | (red << 16) | (green << 8) | blue
 
 
-class Adafruit_NeoPixel(object):
+class NeoPixel(object):
     def __init__(self, num, pin, freq_hz=800000, dma=5, invert=False,
                  brightness=255, channel=0, strip_type=ws.WS2811_STRIP_RGB):
         '''
