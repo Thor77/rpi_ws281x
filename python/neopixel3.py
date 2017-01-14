@@ -116,6 +116,13 @@ class Adafruit_NeoPixel(object):
         if ws != None:
             self._cleanup()
 
+    @property
+    def pixel_count(self):
+        '''
+        Return the number of pixels on the display.
+        '''
+        return ws.ws2811_channel_t_count_get(self._channel)
+
     def _cleanup(self):
         # Clean up memory used by the library when not needed anymore.
         if self._leds is not None:
@@ -161,12 +168,6 @@ class Adafruit_NeoPixel(object):
         it were a sequence of 24-bit RGB values.
         '''
         return self._led_data
-
-    def numPixels(self):
-        '''
-        Return the number of pixels in the display.
-        '''
-        return ws.ws2811_channel_t_count_get(self._channel)
 
     def getPixelColor(self, n):
         '''
