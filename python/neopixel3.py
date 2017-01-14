@@ -87,6 +87,9 @@ class Adafruit_NeoPixel(object):
     def pixel_count(self):
         '''
         Return the number of pixels on the display.
+
+        :return: Number of pixels on the display
+        :rtype: int
         '''
         return ws.ws2811_channel_t_count_get(self._channel)
 
@@ -113,7 +116,13 @@ class Adafruit_NeoPixel(object):
 
     def set_color(self, position, color):
         '''
-        Set LED at position n to the provided 24-bit color value (in RGB order)
+        Set LED at `position` to `color`
+
+        :param position: Position on the display
+        :param color: Color to assign
+
+        :type position: int
+        :type color: Color
         '''
         # Handle if a slice of positions are passed in by setting the
         # appropriate LED data values to the provided values.
@@ -128,14 +137,23 @@ class Adafruit_NeoPixel(object):
 
     def set_brightness(self, brightness):
         '''
-        Scale each LED in the buffer by the provided brightness.  A brightness
-        of 0 is the darkest and 255 is the brightest.
+        Scale each LED in the buffer by the provided brightness.
+        A brightness of 0 is the darkest and 255 is the brightest.
+
+        :param brightness: Brightness to set on the buffer
+        :type brightness: int
         '''
         ws.ws2811_channel_t_brightness_set(self._channel, brightness)
 
     def get_color(self, position):
         '''
-        Get the 24-bit RGB color value for the LED at position n.
+        Get the 24-bit RGB color value for the LED at `position`
+
+        :param position: Position of the desired LED
+        :type position: int
+
+        :return: 24-bit RGB color value of the LED
+        :rtype: int
         '''
         # Handle if a slice of positions are passed in by grabbing all the
         # values and returning them in a list.
