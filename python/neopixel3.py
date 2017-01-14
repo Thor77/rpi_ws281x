@@ -5,12 +5,14 @@ import atexit
 import _rpi_ws281x as ws
 
 
-def Color(red, green, blue, white = 0):
-	"""Convert the provided red, green, blue color to a 24-bit color value.
-	Each color component should be a value 0-255 where 0 is the lowest intensity
-	and 255 is the highest intensity.
-	"""
-	return (white << 24) | (red << 16)| (green << 8) | blue
+class Color(object):
+    '''
+    Convert the provided red, green, blue color to a 24-bit color value.
+    Each color component should be a value 0-255 where 0 is the lowest
+    intensity and 255 is the highest intensity.
+    '''
+    def __init__(self, red, green, blue, white=0):
+        self.value = (white << 24) | (red << 16) | (green << 8) | blue
 
 
 class _LED_Data(object):
@@ -85,17 +87,17 @@ class Adafruit_NeoPixel(object):
 
 		# Grab the led data array.
 		self._led_data = _LED_Data(self._channel, num)
-		
+
 		# Substitute for __del__, traps an exit condition and cleans up properly
 		atexit.register(self._cleanup)
 
 	def __del__(self):
 		# Required because Python will complain about memory leaks
-		# However there's no guarantee that "ws" will even be set 
+		# However there's no guarantee that "ws" will even be set
 		# when the __del__ method for this class is reached.
 		if ws != None:
 			self._cleanup()
-			
+
 	def _cleanup(self):
 		# Clean up memory used by the library when not needed anymore.
 		if self._leds is not None:
@@ -113,7 +115,7 @@ class Adafruit_NeoPixel(object):
 		if resp != ws.WS2811_SUCCESS:
 			message = ws.ws2811_get_return_t_str(resp)
 			raise RuntimeError('ws2811_init failed with code {0} ({1})'.format(resp, message))
-		
+
 	def show(self):
 		"""Update the display with the data from the LED buffer."""
 		resp = ws.ws2811_render(self._leds)
@@ -140,7 +142,7 @@ class Adafruit_NeoPixel(object):
 		ws.ws2811_channel_t_brightness_set(self._channel, brightness)
 
 	def getPixels(self):
-		"""Return an object which allows access to the LED display data as if 
+		"""Return an object which allows access to the LED display data as if
 		it were a sequence of 24-bit RGB values.
 		"""
 		return self._led_data
