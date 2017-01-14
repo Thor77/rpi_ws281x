@@ -116,6 +116,12 @@ class Adafruit_NeoPixel(object):
         if ws is not None:
             self._cleanup()
 
+    def __setitem__(self, position, color):
+        self.set_color(position, color)
+
+    def __getitem__(self, position):
+        return self.get_color(position)
+
     @property
     def pixel_count(self):
         '''
