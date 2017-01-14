@@ -164,7 +164,7 @@ class Adafruit_NeoPixel(object):
         '''
         return self._led_data
 
-    def get_pixel_color(self, n):
+    def get_color(self, n):
         '''
         Get the 24-bit RGB color value for the LED at position n.
         '''
