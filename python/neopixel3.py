@@ -102,6 +102,13 @@ class Adafruit_NeoPixel(object):
         # Substitute for __del__, traps an exit condition and cleans up
         atexit.register(self._cleanup)
 
+        # Initialize libary
+        resp = ws.ws2811_init(self._leds)
+        if resp != ws.WS2811_SUCCESS:
+            message = ws.ws2811_get_return_t_str(resp)
+            raise RuntimeError(
+                'ws2811_init failed with code {0} ({1})'.format(resp, message))
+
     def __del__(self):
         # Required because Python will complain about memory leaks
         # However there's no guarantee that "ws" will even be set
@@ -117,15 +124,6 @@ class Adafruit_NeoPixel(object):
             self._leds = None
             self._channel = None
             # Note that ws2811_fini will free the memory used by led_data internally.
-
-    def begin(self):
-        """Initialize library, must be called once before other functions are
-        called.
-        """
-        resp = ws.ws2811_init(self._leds)
-        if resp != ws.WS2811_SUCCESS:
-            message = ws.ws2811_get_return_t_str(resp)
-            raise RuntimeError('ws2811_init failed with code {0} ({1})'.format(resp, message))
 
     def show(self):
         """Update the display with the data from the LED buffer."""
