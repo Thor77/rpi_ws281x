@@ -144,13 +144,13 @@ class Adafruit_NeoPixel(object):
                     resp, message)
             )
 
-    def setPixelColor(self, n, color):
+    def set_color(self, n, color):
         '''
         Set LED at position n to the provided 24-bit color value (in RGB order)
         '''
         self._led_data[n] = color
 
-    def setPixelColorRGB(self, n, red, green, blue, white=0):
+    def set_color_rgb(self, n, red, green, blue, white=0):
         '''
         Set LED at position n to the provided red, green, and blue color.
         Each color component should be a value from 0 to 255 (where 0 is the
@@ -158,21 +158,21 @@ class Adafruit_NeoPixel(object):
         '''
         self.setPixelColor(n, Color(red, green, blue, white))
 
-    def setBrightness(self, brightness):
+    def set_brightness(self, brightness):
         '''
         Scale each LED in the buffer by the provided brightness.  A brightness
         of 0 is the darkest and 255 is the brightest.
         '''
         ws.ws2811_channel_t_brightness_set(self._channel, brightness)
 
-    def getPixels(self):
+    def get_pixels(self):
         '''
         Return an object which allows access to the LED display data as if
         it were a sequence of 24-bit RGB values.
         '''
         return self._led_data
 
-    def getPixelColor(self, n):
+    def get_pixel_color(self, n):
         '''
         Get the 24-bit RGB color value for the LED at position n.
         '''
