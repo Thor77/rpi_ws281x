@@ -113,7 +113,7 @@ class Adafruit_NeoPixel(object):
         # Required because Python will complain about memory leaks
         # However there's no guarantee that "ws" will even be set
         # when the __del__ method for this class is reached.
-        if ws != None:
+        if ws is not None:
             self._cleanup()
 
     @property
