@@ -52,16 +52,27 @@ class _LED_Data(object):
 
 
 class Adafruit_NeoPixel(object):
-	def __init__(self, num, pin, freq_hz=800000, dma=5, invert=False,
-			brightness=255, channel=0, strip_type=ws.WS2811_STRIP_RGB):
-		"""Class to represent a NeoPixel/WS281x LED display.  Num should be the
-		number of pixels in the display, and pin should be the GPIO pin connected
-		to the display signal line (must be a PWM pin like 18!).  Optional
-		parameters are freq, the frequency of the display signal in hertz (default
-		800khz), dma, the DMA channel to use (default 5), invert, a boolean
-		specifying if the signal line should be inverted (default False), and
-		channel, the PWM channel to use (defaults to 0).
-		"""
+    def __init__(self, num, pin, freq_hz=800000, dma=5, invert=False,
+                 brightness=255, channel=0, strip_type=ws.WS2811_STRIP_RGB):
+        '''
+        Class to represent a NeoPixel/WS281x LED display.
+
+        :param num: Number of pixels on the display
+        :param pin: GPIO pin connected to the display signal line
+        :param freq_hz: Frequency of the display signal
+        :param dma: DMA channel to use
+        :param invert: Signal line should be inverted
+        :param channel: PWM channel to use
+        :param strip_type: Type of the connected LED display
+
+        :type num: int
+        :type pin: int
+        :type freq_hz: int
+        :type dma: int
+        :type invert: bool
+        :type channel: int
+        :param strip_type: int
+        '''
 		# Create ws2811_t structure and fill in parameters.
 		self._leds = ws.new_ws2811_t()
 
