@@ -124,14 +124,11 @@ class Adafruit_NeoPixel(object):
         :type position: int
         :type color: Color
         '''
-        # Handle if a slice of positions are passed in by setting the
-        # appropriate LED data values to the provided values.
         if isinstance(position, slice):
-            index = 0
-            for n in range(position.indices(self.size)):
-                ws.ws2811_led_set(self.channel, n, color[index])
-                index += 1
-        # Else assume the passed in value is a number to the position.
+            positions_slice = position
+            for index, position in enumerate(
+                    range(*positions_slice.indices(self.size))):
+                ws.ws2811_led_set(self.channel, position, color.value)
         else:
             return ws.ws2811_led_set(self.channel, position, color.value)
 
