@@ -150,14 +150,6 @@ class Adafruit_NeoPixel(object):
         '''
         self._led_data[n] = color
 
-    def set_color_rgb(self, n, red, green, blue, white=0):
-        '''
-        Set LED at position n to the provided red, green, and blue color.
-        Each color component should be a value from 0 to 255 (where 0 is the
-        lowest intensity and 255 is the highest intensity).
-        '''
-        self.setPixelColor(n, Color(red, green, blue, white))
-
     def set_brightness(self, brightness):
         '''
         Scale each LED in the buffer by the provided brightness.  A brightness
