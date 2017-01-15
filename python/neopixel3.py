@@ -133,7 +133,7 @@ class NeoPixel(object):
         if isinstance(position, slice):
             positions_slice = position
             for index, position in enumerate(
-                    range(*positions_slice.indices(self.size))):
+                    range(*positions_slice.indices(self.pixel_count))):
                 ws.ws2811_led_set(self._channel, position, color.value)
         else:
             return ws.ws2811_led_set(self._channel, position, color.value)
@@ -162,7 +162,9 @@ class NeoPixel(object):
             positions_slice = position
             return [
                 ws.ws2811_led_get(self._channel, position)
-                for position in range(*positions_slice.indices(self.size))
+                for position in range(
+                    *positions_slice.indices(self.pixel_count)
+                )
             ]
         else:
             return ws.ws2811_led_get(self._channel, position)
