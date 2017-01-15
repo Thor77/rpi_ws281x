@@ -16,25 +16,28 @@ class Color(object):
 
 
 class NeoPixel(object):
-    def __init__(self, num, pin, freq_hz=800000, dma=5, invert=False,
-                 brightness=255, channel=0, strip_type=ws.WS2811_STRIP_RGB):
+    def __init__(
+        self, pixel_count, gpio_pin, frequency=800000, dma_channel=5,
+        invert_signal=False, brightness=255, pwm_channel=0,
+        strip_type=ws.WS2811_STRIP_RGB
+    ):
         '''
         Class to represent a NeoPixel/WS281x LED display.
 
-        :param num: Number of pixels on the display
-        :param pin: GPIO pin connected to the display signal line
-        :param freq_hz: Frequency of the display signal
-        :param dma: DMA channel to use
-        :param invert: Signal line should be inverted
-        :param channel: PWM channel to use
+        :param pixel_count: Number of pixels on the display
+        :param gpio_pin: GPIO pin connected to the display signal line
+        :param frequency: Frequency of the display signal (in hz)
+        :param dma_channel: DMA channel to use
+        :param invert_signal: Signal line should be inverted
+        :param pwm_channel: PWM channel to use
         :param strip_type: Type of the connected LED display
 
-        :type num: int
-        :type pin: int
-        :type freq_hz: int
-        :type dma: int
-        :type invert: bool
-        :type channel: int
+        :type pixel_count: int
+        :type gpio_pin: int
+        :type frequency: int
+        :type dma_channel: int
+        :type invert_signal: bool
+        :type pwm_channel: int
         :param strip_type: int
         '''
         # Create ws2811_t structure and fill in parameters.
@@ -49,16 +52,16 @@ class NeoPixel(object):
             ws.ws2811_channel_t_brightness_set(chan, 0)
 
         # Initialize the channel in use
-        self._channel = ws.ws2811_channel_get(self._leds, channel)
-        ws.ws2811_channel_t_count_set(self._channel, num)
-        ws.ws2811_channel_t_gpionum_set(self._channel, pin)
-        ws.ws2811_channel_t_invert_set(self._channel, 0 if not invert else 1)
+        self._channel = ws.ws2811_channel_get(self._leds, dma_channel)
+        ws.ws2811_channel_t_count_set(self._channel, pixel_count)
+        ws.ws2811_channel_t_gpionum_set(self._channel, gpio_pin)
+        ws.ws2811_channel_t_invert_set(self._channel, 0 if not invert_signal else 1)
         ws.ws2811_channel_t_brightness_set(self._channel, brightness)
         ws.ws2811_channel_t_strip_type_set(self._channel, strip_type)
 
         # Initialize the controller
-        ws.ws2811_t_freq_set(self._leds, freq_hz)
-        ws.ws2811_t_dmanum_set(self._leds, dma)
+        ws.ws2811_t_freq_set(self._leds, frequency)
+        ws.ws2811_t_dmanum_set(self._leds, dma_channel)
 
         # Substitute for __del__, traps an exit condition and cleans up
         atexit.register(self._cleanup)
