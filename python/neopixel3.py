@@ -83,6 +83,12 @@ class NeoPixel(object):
     def __getitem__(self, position):
         return self.get_color(position)
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.show()
+
     @property
     def pixel_count(self):
         '''
